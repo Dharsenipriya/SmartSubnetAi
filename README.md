@@ -9,6 +9,15 @@
 ✅ **Real-Time Monitoring**: Track network health 24/7  
 ✅ **Smart Allocation**: VLSM-based efficient IP distribution  
 ✅ **Interactive Dashboard**: Beautiful web interface for management  
+✅ Automatic alert checking after each task
+✅ Conflict alerts when conflicts are found
+✅ Utilization alerts every 30 minutes
+✅ Prediction alerts when ML forecasts critical capacity
+✅ Daily reports at 9:00 AM
+✅ All alerts logged to console and file
+✅ No manual intervention needed
+
+
 
 ## Quick Start
 
@@ -31,16 +40,16 @@ streamlit run dashboard.py
 ## Project Structure
 
 SmartSubnetAI/
-├── subnet_calculator.py # Core subnetting algorithms
-├── ip_validator.py # IP validation utilities
-├── database.py # Database models and management
-├── data_collector.py # Network data collection
-├── ml_predictor.py # Machine learning engine
-├── conflict_resolver.py # Conflict detection & resolution
-├── dashboard.py # Streamlit web interface
-├── main.py # Main orchestration
-├── test_system.py # Automated tests
-└── README.md # This file
+├── main.py                  ✅ UPDATED (alerts integrated)
+├── alert_manager.py         ✅ NEW (console logger)
+├── database.py              ✅ Already exists
+├── data_collector.py        ✅ Already exists
+├── ml_predictor.py          ✅ Already exists
+├── conflict_resolver.py     ✅ Already exists
+├── dashboard.py             ✅ Already exists
+├── smartsubnet.db           ✅ Database
+└── smartsubnet_alerts.log   ✅ NEW (alert log file)
+
 
 
 ## Usage
@@ -118,6 +127,10 @@ streamlit run dashboard.py
 python main.py --continuous
 
 In another terminal:
+
+# Check your alert log:
+
+type smartsubnet_alerts.log
 
 # View live dashboard
 
