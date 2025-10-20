@@ -27,14 +27,14 @@ st.title("🌐 SmartSubnet AI")
 st.markdown("**Predictive IP Allocation for Scalable Data Centers**")
 st.markdown("---")
 
-# Sidebar
-st.sidebar.header("Navigation")
+# In sidebar
 page = st.sidebar.radio("Go to", [
     "Dashboard",
     "Subnet Utilization",
     "ML Predictions",
     "Conflict Management",
-    "Manual Allocation"
+    "Manual Allocation",
+    "Cost Analysis"  # NEW
 ])
 
 # DASHBOARD PAGE
@@ -376,7 +376,83 @@ elif page == "Manual Allocation":
     st.subheader("📋 Pending Approvals")
     
     st.info("No pending allocation requests at this time")
-
+    
+    # COST ANALYSIS PAGE
+elif page == "Cost Analysis":
+    st.header("💰 Cost Analysis & Savings")
+    
+    from cost_analyzer import CostAnalyzer
+    
+    analyzer = CostAnalyzer(db)
+    
+    if st.button("🔄 Refresh Analysis", type="primary"):
+        report = analyzer.generate_cost_report()
+        st.success("Analysis updated!")
+    
+    # Current waste
+    st.subheader("📊 Current IP Waste")
+    
+    waste = analyzer.calculate_ip_waste()
+    
+    col1, col2, col3, col4 = st.columns(4)
+    col1.metric("Total IPs", f"{waste['total_allocated']:,}")
+    col2.metric("Used IPs", f"{waste['total_used']:,}")
+    col3.metric("Wasted IPs", f"{waste['total_wasted']:,}")
+    col4.metric("Waste %", f"{waste['waste_percentage']:.1f}%")
+    
+    # Waste gauge
+    fig = go.Figure(go.Indicator(
+        mode = "gauge+number",
+        value = waste['waste_percentage'],
+        domain = {'x': [0, 1], 'y': [0, 1]},
+        title = {'text': "IP Waste Percentage"},
+        gauge = {
+            'axis': {'range': [None, 100]},
+            'bar': {'color': "red"},
+            'steps': [
+                {'range': [0, 20], 'color': "lightgreen"},
+                {'range': [20, 40], 'color': "yellow"},
+                {'range': [40, 100], 'color': "lightcoral"}
+            ]
+        }
+    ))
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Cost impact
+    st.subheader("💵 Financial Impact")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        st.metric("Monthly Waste Cost", f"${waste['monthly_waste_cost']:.2f}")
+        st.metric("Annual Waste Cost", f"${waste['annual_waste_cost']:.2f}")
+    
+    # Savings potential
+    st.subheader("💡 Optimization Potential")
+    
+    savings = analyzer.calculate_optimization_savings()
+    
+    col1, col2, col3 = st.columns(3)
+    col1.metric("Recoverable IPs", f"{savings['recoverable_ips']:.0f}")
+    col2.metric("Annual IP Savings", f"${savings['annual_ip_savings']:.2f}")
+    col3.metric("Total Annual Savings", f"${savings['total_annual_savings']:.2f}")
+    
+    # ROI
+    if savings['total_annual_savings'] > 0:
+        st.success(f"🎯 ROI: Break even in {analyzer._calculate_roi():.1f} months")
+    
+    # Recommendations
+    st.subheader("📋 Recommendations")
+    
+    st.info("""
+    **To reduce IP waste:**
+    1. ✅ Implement automated IP reclamation
+    2. ✅ Right-size subnets based on actual usage
+    3. ✅ Regularly audit and clean up unused allocations
+    4. ✅ Use ML predictions to prevent over-provisioning
+    """)
+\
 # Footer
 st.markdown("---")
 st.markdown("**SmartSubnet AI** v1.0 | Predictive IP Allocation for Modern Data Centers")

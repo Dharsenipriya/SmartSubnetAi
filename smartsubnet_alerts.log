@@ -1,0 +1,143 @@
+
+======================================================================
+[2025-10-21 04:06:28] [NORMAL]
+Subject: High Utilization Alert
+----------------------------------------------------------------------
+High Utilization Detected:
+
+[WARNING] Subnet: 10.0.2.0/24
+  Utilization: 88.6%
+  Available IPs: 29
+
+[WARNING] Subnet: 10.0.1.0/24
+  Utilization: 85.0%
+  Available IPs: 38
+
+Recommended Actions:
+1. Review and reclaim unused IP addresses
+2. Consider subnet expansion or reallocation
+3. Check for IP conflicts or unauthorized devices
+
+======================================================================
+
+======================================================================
+[2025-10-21 04:06:28] [HIGH]
+Subject: IP Conflict Alert
+----------------------------------------------------------------------
+Active IP Conflicts Detected: 3
+
+IP: 10.0.2.80
+  Subnet: 10.0.2.0/24
+  Type: unauthorized
+  Detected: 2025-10-20 18:56
+
+IP: 192.168.2.40
+  Subnet: 192.168.2.0/24
+  Type: expired_lease
+  Detected: 2025-10-20 19:16
+
+IP: 192.168.1.58
+  Subnet: 192.168.1.0/24
+  Type: unauthorized
+  Detected: 2025-10-20 20:39
+
+Action Required: Review conflicts in dashboard
+
+======================================================================
+
+======================================================================
+[2025-10-21 04:06:28] [NORMAL]
+Subject: Test Alert
+----------------------------------------------------------------------
+This is a test from SmartSubnet AI
+
+System Status: OK
+======================================================================
+
+======================================================================
+[2025-10-21 04:06:28] [NORMAL]
+Subject: Daily Network Report
+----------------------------------------------------------------------
+
+Daily Network Report - 2025-10-21
+
+UTILIZATION SUMMARY:
+  Average Utilization: 47.4%
+  Subnets Monitored: 5
+
+CONFLICT SUMMARY:
+  Active Conflicts: 3
+  Resolved Today: 4
+
+TOP UTILIZED SUBNETS:
+  10.0.2.0/24: 88.6%
+  10.0.1.0/24: 85.0%
+  10.0.1.0/24: 73.2%
+  192.168.2.0/24: 52.8%
+  172.16.1.0/24: 47.6%
+
+---
+For detailed analysis, visit the SmartSubnet AI dashboard.
+
+======================================================================
+
+======================================================================
+[2025-10-21 04:09:38] [NORMAL]
+Subject: High Utilization Alert
+----------------------------------------------------------------------
+High Utilization Detected:
+
+[WARNING] Subnet: 10.0.2.0/24
+  Utilization: 88.6%
+  Available IPs: 29
+
+Recommended Actions:
+1. Review and reclaim unused IP addresses
+2. Consider subnet expansion or reallocation
+3. Check for IP conflicts or unauthorized devices
+
+======================================================================
+
+======================================================================
+[2025-10-21 04:09:40] [NORMAL]
+Subject: Daily Network Report
+----------------------------------------------------------------------
+
+Daily Network Report - 2025-10-21
+
+UTILIZATION SUMMARY:
+  Average Utilization: 44.4%
+  Subnets Monitored: 5
+
+CONFLICT SUMMARY:
+  Active Conflicts: 4
+  Resolved Today: 4
+
+TOP UTILIZED SUBNETS:
+  10.0.2.0/24: 88.6%
+  10.0.1.0/24: 73.2%
+  10.0.1.0/24: 61.0%
+  172.16.1.0/24: 50.4%
+  172.16.1.0/24: 40.5%
+
+---
+For detailed analysis, visit the SmartSubnet AI dashboard.
+
+======================================================================
+
+======================================================================
+[2025-10-21 04:09:58] [NORMAL]
+Subject: High Utilization Alert
+----------------------------------------------------------------------
+High Utilization Detected:
+
+[WARNING] Subnet: 10.0.2.0/24
+  Utilization: 85.0%
+  Available IPs: 38
+
+Recommended Actions:
+1. Review and reclaim unused IP addresses
+2. Consider subnet expansion or reallocation
+3. Check for IP conflicts or unauthorized devices
+
+======================================================================
