@@ -163,7 +163,9 @@ class DatabaseManager:
     def close(self):
         """Close database connection"""
         self.session.close()
+        self.engine.dispose()   # <-- Add this line!
         print("Database connection closed")
+
 
 
 # Test database

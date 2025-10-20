@@ -43,74 +43,58 @@ class SubnetCalculator:
             print(f"❌ Error: {e}")
             return []
     
-    def vlsm_allocation(self, requirements: List[int]) -> List[Dict]:
+    def vlsm_allocation(self, requirements: list) -> list:
         """
-        Variable Length Subnet Masking - allocate subnets based on host requirements
-        Requirements: List of host counts needed (e.g., [50, 100, 25, 10])
+        Allocate subnets based on variable length subnet masking (VLSM)
+        requirements: List of required host counts for each subnet
         """
-        # Sort requirements in descending order
+        import ipaddress
+        import math
         sorted_reqs = sorted(requirements, reverse=True)
         allocations = []
-        available_network = self.network
-        
+        available_start = int(self.network.network_address)
+        available_end = int(self.network.broadcast_address)
+    
         print(f"\n🔧 VLSM Allocation for requirements: {requirements}")
         print("=" * 60)
-        
+    
         for idx, hosts_needed in enumerate(sorted_reqs, 1):
-            # Calculate required prefix length
-            import math
-            # Add 2 for network and broadcast addresses
             total_needed = hosts_needed + 2
             host_bits = math.ceil(math.log2(total_needed))
             new_prefix = 32 - host_bits
-            
-            # Create subnet
-            try:
-                subnet = ipaddress.IPv4Network(f"{available_network.network_address}/{new_prefix}", strict=False)
-                
-                # Ensure subnet fits within available network
-                if subnet.network_address < available_network.network_address or \
-                   subnet.broadcast_address > available_network.broadcast_address:
-                    print(f"❌ Cannot allocate subnet {idx}: Insufficient space")
-                    break
-                
-                allocation = {
-                    'subnet_id': idx,
-                    'required_hosts': hosts_needed,
-                    'subnet': str(subnet),
-                    'usable_hosts': subnet.num_addresses - 2,
-                    'network_address': str(subnet.network_address),
-                    'broadcast_address': str(subnet.broadcast_address),
-                    'first_usable': str(subnet.network_address + 1),
-                    'last_usable': str(subnet.broadcast_address - 1),
-                    'netmask': str(subnet.netmask)
-                }
-                
-                allocations.append(allocation)
-                
-                print(f"\n📦 Subnet {idx}:")
-                print(f"   Required: {hosts_needed} hosts | Allocated: {allocation['usable_hosts']} hosts")
-                print(f"   Network: {allocation['subnet']}")
-                print(f"   Range: {allocation['first_usable']} - {allocation['last_usable']}")
-                
-                # Move to next available address
-                next_address = subnet.broadcast_address + 1
-                if next_address <= available_network.broadcast_address:
-                    remaining = available_network.broadcast_address - next_address + 1
-                    available_network = ipaddress.IPv4Network(
-                        f"{next_address}/{32 - (remaining - 1).bit_length()}", 
-                        strict=False
-                    )
-                else:
-                    break
-                    
-            except Exception as e:
-                print(f"❌ Error allocating subnet {idx}: {e}")
+            subnet_size = 2 ** host_bits
+            subnet_network = available_start
+            subnet_broadcast = available_start + subnet_size - 1
+        
+            if subnet_broadcast > available_end:
+                print(f"❌ Cannot allocate subnet {idx}: Insufficient space.")
                 break
         
+            allocation = {
+            'subnet_id': idx,
+            'required_hosts': hosts_needed,
+            'subnet': f"{ipaddress.IPv4Address(subnet_network)}/{new_prefix}",
+            'usable_hosts': subnet_size - 2,
+            'network_address': str(ipaddress.IPv4Address(subnet_network)),
+            'broadcast_address': str(ipaddress.IPv4Address(subnet_broadcast)),
+            'first_usable': str(ipaddress.IPv4Address(subnet_network + 1)),
+            'last_usable': str(ipaddress.IPv4Address(subnet_broadcast - 1)),
+            'netmask': str(ipaddress.IPv4Network(f"{ipaddress.IPv4Address(subnet_network)}/{new_prefix}").netmask)
+            }
+        
+            allocations.append(allocation)
+        
+            print(f"\n📦 Subnet {idx}:")
+            print(f"   Required: {hosts_needed} hosts | Allocated: {allocation['usable_hosts']} hosts")
+            print(f"   Network: {allocation['subnet']}")
+            print(f"   Range: {allocation['first_usable']} - {allocation['last_usable']}")
+        
+        # Update available_start for next round
+            available_start = subnet_broadcast + 1
+    
         print("\n" + "=" * 60)
         print(f"✅ Successfully allocated {len(allocations)} subnets")
-        
+    
         return allocations
     
     def check_ip_conflict(self, ip_list: List[str]) -> Dict:
