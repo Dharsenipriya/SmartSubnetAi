@@ -95,7 +95,7 @@ python test_system.py
 
 ✅ smartsubnet.db - Database file (auto-generated)
 
-## HOW TO USE YOUR PRODUCT
+## HOW TO USE 
 
 Option 1: Full Demo
 
